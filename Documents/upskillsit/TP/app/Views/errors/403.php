@@ -1,0 +1,1 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><link rel="stylesheet" href="<?= asset('css/app.css') ?>"><main class="error-page"><h1>Accès refusé</h1><p>Vous n'avez pas l'autorisation d'accéder à cette page.</p><a class="btn btn-primary" href="<?= url('/') ?>">Retour</a></main></html>

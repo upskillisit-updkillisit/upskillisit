@@ -1,0 +1,126 @@
+<?php
+
+require dirname(__DIR__) . '/app/bootstrap.php';
+
+use App\Core\Router;
+use App\Controllers\AdminController;
+use App\Controllers\AuthController;
+use App\Controllers\DashboardController;
+use App\Controllers\EntrepriseController;
+use App\Controllers\ProfessionnelController;
+use App\Controllers\PublicController;
+
+$router = new Router();
+
+$router->get('/', [PublicController::class, 'home']);
+$router->get('/a-propos', [PublicController::class, 'page']);
+$router->get('/services', [PublicController::class, 'page']);
+$router->get('/etudiants', [PublicController::class, 'page']);
+$router->get('/professionnels-it', [PublicController::class, 'page']);
+$router->get('/entreprises', [PublicController::class, 'page']);
+$router->get('/contact', [PublicController::class, 'contact']);
+$router->post('/contact', [PublicController::class, 'sendContact']);
+$router->get('/faq', [PublicController::class, 'faq']);
+$router->get('/mentions-legales', [PublicController::class, 'legal']);
+$router->get('/politique-confidentialite', [PublicController::class, 'privacy']);
+$router->get('/actualites', [PublicController::class, 'articles']);
+$router->get('/actualite/{id}', [PublicController::class, 'article']);
+$router->get('/opportunites', [PublicController::class, 'opportunities']);
+$router->get('/opportunite/{id}', [PublicController::class, 'opportunity']);
+$router->get('/ressources', [PublicController::class, 'resources']);
+$router->get('/ressource/{id}', [PublicController::class, 'resource']);
+$router->get('/evenements', [PublicController::class, 'events']);
+$router->get('/evenement/{id}', [PublicController::class, 'event']);
+$router->post('/evenement/{id}/inscription', [PublicController::class, 'registerEvent']);
+
+$router->get('/inscription', [AuthController::class, 'registerForm']);
+$router->post('/inscription', [AuthController::class, 'register']);
+$router->get('/connexion', [AuthController::class, 'loginForm']);
+$router->post('/connexion', [AuthController::class, 'login']);
+$router->post('/deconnexion', [AuthController::class, 'logout']);
+$router->get('/mot-de-passe-oublie', [AuthController::class, 'forgotForm']);
+$router->post('/mot-de-passe-oublie', [AuthController::class, 'forgot']);
+$router->get('/reinitialiser-mot-de-passe/{token}', [AuthController::class, 'resetForm']);
+$router->post('/reinitialiser-mot-de-passe/{token}', [AuthController::class, 'reset']);
+$router->get('/compte', [AuthController::class, 'account']);
+$router->post('/compte', [AuthController::class, 'updateAccount']);
+$router->post('/compte/supprimer', [AuthController::class, 'deleteAccount']);
+
+$router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/profil', [DashboardController::class, 'profile']);
+$router->post('/profil', [DashboardController::class, 'saveProfile']);
+$router->get('/candidatures', [DashboardController::class, 'applications']);
+$router->get('/notifications', [DashboardController::class, 'notifications']);
+$router->post('/opportunite/{id}/candidater', [DashboardController::class, 'applyOpportunity']);
+
+$router->get('/professionnel', [ProfessionnelController::class, 'index']);
+$router->get('/professionnel/profil', [ProfessionnelController::class, 'profile']);
+$router->post('/professionnel/profil', [ProfessionnelController::class, 'saveProfile']);
+$router->get('/professionnel/competences', [ProfessionnelController::class, 'skills']);
+$router->get('/professionnel/experiences', [ProfessionnelController::class, 'experiences']);
+$router->get('/professionnel/projets', [ProfessionnelController::class, 'projects']);
+$router->post('/professionnel/experiences', [ProfessionnelController::class, 'saveExperience']);
+$router->post('/professionnel/experiences/{id}/delete', [ProfessionnelController::class, 'deleteExperience']);
+$router->post('/professionnel/projets', [ProfessionnelController::class, 'saveProject']);
+$router->post('/professionnel/projets/{id}/delete', [ProfessionnelController::class, 'deleteProject']);
+$router->get('/professionnel/opportunites', [ProfessionnelController::class, 'opportunities']);
+$router->post('/professionnel/opportunites/{id}/candidater', [ProfessionnelController::class, 'applyOpportunity']);
+$router->get('/professionnel/candidatures', [ProfessionnelController::class, 'applications']);
+$router->get('/professionnel/ressources', [ProfessionnelController::class, 'resources']);
+$router->get('/professionnel/evenements', [ProfessionnelController::class, 'events']);
+$router->get('/professionnel/notifications', [ProfessionnelController::class, 'notifications']);
+$router->get('/professionnel/parametres', [ProfessionnelController::class, 'settings']);
+
+$router->get('/entreprise', [EntrepriseController::class, 'index']);
+$router->get('/entreprise/profil', [EntrepriseController::class, 'profile']);
+$router->post('/entreprise/profil', [EntrepriseController::class, 'saveProfile']);
+$router->get('/entreprise/opportunites/creer', [EntrepriseController::class, 'createOpportunity']);
+$router->get('/entreprise/opportunites', [EntrepriseController::class, 'opportunities']);
+$router->post('/entreprise/opportunites', [EntrepriseController::class, 'saveOpportunity']);
+$router->post('/entreprise/opportunites/{id}/status', [EntrepriseController::class, 'statusOpportunity']);
+$router->post('/entreprise/opportunites/{id}/delete', [EntrepriseController::class, 'deleteOpportunity']);
+$router->get('/entreprise/candidatures', [EntrepriseController::class, 'applications']);
+$router->post('/entreprise/candidatures/{id}/status', [EntrepriseController::class, 'applicationStatus']);
+$router->get('/entreprise/profils', [EntrepriseController::class, 'talents']);
+$router->get('/entreprise/evenements', [EntrepriseController::class, 'events']);
+$router->get('/entreprise/parametres', [EntrepriseController::class, 'settings']);
+
+$router->get('/admin', [AdminController::class, 'index']);
+$router->get('/admin/users', [AdminController::class, 'users']);
+$router->post('/admin/users/{id}/status', [AdminController::class, 'userStatus']);
+$router->post('/admin/users/{id}/delete', [AdminController::class, 'deleteUser']);
+$router->get('/admin/opportunites', [AdminController::class, 'opportunities']);
+$router->post('/admin/opportunites', [AdminController::class, 'saveOpportunity']);
+$router->post('/admin/opportunites/{id}/status', [AdminController::class, 'statusOpportunity']);
+$router->post('/admin/opportunites/{id}/delete', [AdminController::class, 'deleteOpportunity']);
+$router->get('/admin/opportunities', [AdminController::class, 'opportunities']);
+$router->post('/admin/opportunities', [AdminController::class, 'saveOpportunity']);
+$router->post('/admin/opportunities/{id}/status', [AdminController::class, 'statusOpportunity']);
+$router->post('/admin/opportunities/{id}/delete', [AdminController::class, 'deleteOpportunity']);
+$router->get('/admin/ressources', [AdminController::class, 'resources']);
+$router->post('/admin/ressources', [AdminController::class, 'saveResource']);
+$router->post('/admin/ressources/{id}/status', [AdminController::class, 'statusResource']);
+$router->post('/admin/ressources/{id}/delete', [AdminController::class, 'deleteResource']);
+$router->get('/admin/resources', [AdminController::class, 'resources']);
+$router->post('/admin/resources', [AdminController::class, 'saveResource']);
+$router->post('/admin/resources/{id}/status', [AdminController::class, 'statusResource']);
+$router->post('/admin/resources/{id}/delete', [AdminController::class, 'deleteResource']);
+$router->get('/admin/evenements', [AdminController::class, 'events']);
+$router->post('/admin/evenements', [AdminController::class, 'saveEvent']);
+$router->post('/admin/evenements/{id}/status', [AdminController::class, 'statusEvent']);
+$router->post('/admin/evenements/{id}/delete', [AdminController::class, 'deleteEvent']);
+$router->get('/admin/events', [AdminController::class, 'events']);
+$router->post('/admin/events', [AdminController::class, 'saveEvent']);
+$router->post('/admin/events/{id}/status', [AdminController::class, 'statusEvent']);
+$router->post('/admin/events/{id}/delete', [AdminController::class, 'deleteEvent']);
+$router->get('/admin/articles', [AdminController::class, 'articles']);
+$router->post('/admin/articles', [AdminController::class, 'saveArticle']);
+$router->post('/admin/articles/{id}/status', [AdminController::class, 'statusArticle']);
+$router->post('/admin/articles/{id}/delete', [AdminController::class, 'deleteArticle']);
+$router->get('/admin/statistiques', [AdminController::class, 'statistics']);
+$router->get('/admin/parametres', [AdminController::class, 'settings']);
+$router->get('/admin/messages', [AdminController::class, 'messages']);
+$router->post('/admin/messages/{id}/status', [AdminController::class, 'messageStatus']);
+$router->get('/admin/notifications', [AdminController::class, 'notifications']);
+
+$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

@@ -1,0 +1,1 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><link rel="stylesheet" href="/assets/css/app.css"><main class="error-page"><h1>Erreur serveur</h1><p>Une erreur technique est survenue. Veuillez réessayer plus tard.</p></main></html>

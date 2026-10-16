@@ -1,0 +1,1 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><link rel="stylesheet" href="<?= asset('css/app.css') ?>"><main class="error-page"><h1>Page introuvable</h1><p>La ressource demandée n'existe pas ou n'est plus disponible.</p><a class="btn btn-primary" href="<?= url('/') ?>">Retour à l'accueil</a></main></html>

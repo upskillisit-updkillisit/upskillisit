@@ -1,4 +1,4 @@
-USE `upskillsit`;
+-- Select the target database in phpMyAdmin before importing this file.
 
 INSERT INTO users (first_name,last_name,email,password,role,terms_accepted,data_consent,status) VALUES
 ('Admin','UpSkillsIT','admin@example.com','$2y$10$9/IMdpCJ0N0BZgGH1qKxTO65rcTTThgol1DTlmU/wf.Rt1FmG1Byy','admin',1,1,'active'),

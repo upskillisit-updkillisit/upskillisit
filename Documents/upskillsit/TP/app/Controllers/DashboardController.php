@@ -128,7 +128,7 @@ final class DashboardController extends Controller
             $dir = config('uploads.' . $dirKey);
             if (!is_dir($dir)) { mkdir($dir, 0775, true); }
             move_uploaded_file($file['tmp_name'], $dir . '/' . $name);
-            $result[$targetField] = '/uploads/' . ($field === 'cv' ? 'cv' : 'photos') . '/' . $name;
+            $result[$targetField] = url('uploads/' . ($field === 'cv' ? 'cv' : 'photos') . '/' . $name);
         }
         return $result;
     }

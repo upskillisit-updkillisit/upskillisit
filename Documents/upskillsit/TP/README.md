@@ -59,6 +59,23 @@ Les photos et CV sont enregistrés dans `public/uploads/`. Le système de fichie
 
 Après avoir renseigné les variables et initialisé MySQL, lancer le déploiement depuis Render. Vérifier l'URL publique, la page d'accueil, une route directe telle que `/opportunites`, le CSS, la connexion et les téléversements. Les sessions PHP utilisent le stockage local du conteneur; les utilisateurs devront probablement se reconnecter après un redémarrage ou redéploiement.
 
+## Déploiement InfinityFree (PHP/MySQL mutualisé)
+
+Le projet est déjà en PHP natif : il n'utilise ni Laravel, ni Blade, ni Eloquent, ni Composer. Il conserve son routeur PHP léger, ses contrôleurs et ses vues PHP. `index.php` à la racine du projet appelle `public/index.php`; le `.htaccess` du projet réécrit les routes et sert les assets depuis `public/`, tout en bloquant l'accès HTTP à `app/`, `config/`, `database/`, `storage/` et aux fichiers cachés.
+
+1. Dans le panneau InfinityFree, créez une base MySQL et copiez **l'hôte, le nom de base, l'utilisateur et le mot de passe exactement comme affichés**. L'hôte `sql200.infinityfree.com`, la base `if0_43196352_upskillsit` et l'utilisateur `if0_43196352` fournis pour ce déploiement sont des valeurs d'exemple pour le compte indiqué; confirmez-les dans le panneau.
+2. Dans phpMyAdmin, sélectionnez la base concernée, puis importez `database/schema.sql`. Ce script crée les tables manquantes et ne supprime ni ne vide les tables existantes. Choisissez `utf8mb4` si le panneau vous demande l'interclassement.
+3. N'importez `database/seed.sql` que si vous voulez les données de démonstration dans une base vide. Il n'est pas idempotent et crée des comptes de démonstration avec des mots de passe connus; ne l'importez pas dans une base de production contenant des utilisateurs.
+4. Copiez **le contenu de ce dossier `TP/`** directement dans `htdocs` via FTP ou le gestionnaire de fichiers. Ne téléversez pas `UPSKILLSIITT1/` ni un dossier `.git`.
+5. Sur le serveur, copiez `.env.example` vers `.env` à la racine de `htdocs`, puis complétez `DB_PASSWORD` avec le mot de passe de base. `.env` est ignoré par Git et bloqué par `.htaccess`; ne le publiez jamais. Le chargeur lit les vraies variables de processus quand elles existent, puis `.env` pour les hébergements mutualisés qui ne permettent pas de les configurer dans le panneau. Les hébergements gratuits InfinityFree ne fournissent pas de variables PHP personnalisées via le panneau.
+6. Ouvrez le domaine en HTTPS et vérifiez `/`, `/opportunites`, `/connexion`, les assets, les rôles et les téléversements. L'application n'utilise ni Node.js ni commande de terminal sur le serveur.
+
+`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `APP_ENV` et `BASE_URL` sont lus depuis l'environnement. Sans `.env` et sans variables, les valeurs de repli XAMPP (`127.0.0.1`, `upskillsit`, `root`, mot de passe vide) restent inchangées. Laissez `BASE_URL` vide pour que les liens se basent sur le chemin d'installation détecté; renseignez-le seulement si le site est installé sous un préfixe inhabituel.
+
+Les tables SQL utilisent des types, index et clés étrangères pris en charge par MySQL/MariaDB courants. L'import doit se faire dans la base sélectionnée de phpMyAdmin : les scripts n'imposent plus le nom local `upskillsit` ni `CREATE DATABASE`. Une table déjà existante n'est pas modifiée par `CREATE TABLE IF NOT EXISTS`; une évolution ultérieure de schéma devra donc être appliquée avec une migration SQL dédiée et sauvegardée au préalable.
+
+Le formulaire de contact enregistre les messages dans la base, sans dépendre de l'envoi d'e-mail. Le flux de réinitialisation de mot de passe n'affiche son lien qu'en mode `APP_ENV=local`; en production il faut le relier à un fournisseur SMTP externe avant d'activer la récupération par e-mail. InfinityFree restreint `mail()` sur son hébergement gratuit et recommande un SMTP externe. Les fichiers de `storage/sessions/` sont des données temporaires locales : ne les téléversez pas; laissez PHP créer les sessions sur le serveur.
+
 ## Comptes de démonstration
 
 - Admin : `admin@example.com` / `AdminDemo!2026`

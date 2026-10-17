@@ -1,22 +1,19 @@
 <?php
 
 $env = static function (string $name, string $default): string {
-    $value = getenv($name);
-    return $value === false ? $default : $value;
+    $value = function_exists('getenv') ? getenv($name) : false;
+    if ($value !== false && $value !== '') {
+        return $value;
+    }
+    $value = $_ENV[$name] ?? $_SERVER[$name] ?? null;
+    return is_string($value) && $value !== '' ? $value : $default;
 };
 
 return [
     'app_name' => 'UpSkillsIT',
     'base_url' => $env('BASE_URL', ''),
     'env' => $env('APP_ENV', 'local'),
-    'db' => [
-        'host' => $env('DB_HOST', '127.0.0.1'),
-        'port' => $env('DB_PORT', '3306'),
-        'name' => $env('DB_NAME', 'upskillsit'),
-        'user' => $env('DB_USER', 'root'),
-        'pass' => $env('DB_PASSWORD', ''),
-        'charset' => 'utf8mb4',
-    ],
+    'db' => require __DIR__ . '/database.php',
     'security' => [
         'session_name' => 'UPSKILLSITSESSID',
         'csrf_key' => '_csrf_token',

@@ -58,7 +58,7 @@ final class AuthController extends Controller
         CSRF::requireValid();
         $token = (new User())->createResetToken((string) ($_POST['email'] ?? ''));
         $message = t('messages.reset_if_exists');
-        if ($token) {
+        if ($token && config('env') === 'local') {
             $message .= ' ' . t('messages.local_link') . ': ' . url('/reinitialiser-mot-de-passe/' . $token);
         }
         Session::flash('success', $message);

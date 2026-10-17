@@ -218,7 +218,7 @@ return [
         'email_used' => 'This email is already in use.',
         'too_many_attempts' => 'Too many attempts. Try again in a few minutes.',
         'invalid_credentials' => 'Invalid credentials or suspended account.',
-        'reset_if_exists' => 'If the account exists, a reset link will be sent.',
+        'reset_if_exists' => 'If the account exists, a reset link will be sent when email delivery is configured.',
         'local_link' => 'Local link',
         'password_confirm' => 'The password must contain at least 8 characters and be confirmed.',
         'password_updated' => 'Password updated. You can now log in.',

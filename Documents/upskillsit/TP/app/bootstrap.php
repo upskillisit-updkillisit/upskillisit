@@ -5,6 +5,34 @@ declare(strict_types=1);
 define('ROOT_PATH', dirname(__DIR__));
 define('APP_PATH', __DIR__);
 
+// InfinityFree shared hosting does not inject custom process environment
+// variables. Read an optional, web-blocked .env file without putenv().
+$envFile = ROOT_PATH . '/.env';
+if (is_readable($envFile)) {
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+
+        [$name, $value] = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+        if (!preg_match('/^[A-Z_][A-Z0-9_]*$/i', $name)) {
+            continue;
+        }
+
+        if (strlen($value) >= 2 && (($value[0] === '"' && str_ends_with($value, '"')) || ($value[0] === "'" && str_ends_with($value, "'")))) {
+            $value = substr($value, 1, -1);
+        }
+
+        $processValue = function_exists('getenv') ? getenv($name) : false;
+        if ($processValue === false || $processValue === '') {
+            $_ENV[$name] = $value;
+        }
+    }
+}
+
 $config = require ROOT_PATH . '/config/config.php';
 define('CONFIG', $config);
 
@@ -49,6 +77,14 @@ function config(string $key, mixed $default = null): mixed
 function url(string $path = ''): string
 {
     $base = rtrim((string) config('base_url', ''), '/');
+    if ($base === '') {
+        $script = parse_url((string) ($_SERVER['SCRIPT_NAME'] ?? '/'), PHP_URL_PATH) ?: '/';
+        $directory = str_replace('\\', '/', dirname($script));
+        if ($directory !== '/' && $directory !== '.') {
+            $base = rtrim($directory, '/');
+        }
+    }
+
     return $base . '/' . ltrim($path, '/');
 }
 

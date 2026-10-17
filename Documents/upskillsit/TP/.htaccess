@@ -1,3 +1,19 @@
+Options -Indexes
+DirectoryIndex index.php
 RewriteEngine On
-RewriteRule ^$ public/ [L]
-RewriteRule (.*) public/$1 [L]
+
+# Keep application code, data, and dotfiles outside public access.
+RewriteRule (^|/)\. - [F,L]
+RewriteRule ^(app|config|database|docs|docker|storage|UPSKILLSIITT1)(/|$) - [F,L,NC]
+RewriteRule ^(Dockerfile|README\.md|\.dockerignore|\.gitmodules|composer\.(json|lock))$ - [F,L,NC]
+
+# Public assets and uploads are stored under public/ but use clean URLs.
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
+RewriteRule ^(robots\.txt|sitemap\.xml)$ public/$1 [L]
+
+# Let existing public files through, then dispatch application routes.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^ index.php [QSA,L]

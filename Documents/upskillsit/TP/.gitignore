@@ -1,0 +1,4 @@
+/.env
+/public/uploads/photos/*
+/public/uploads/cv/*
+/storage/sessions/*

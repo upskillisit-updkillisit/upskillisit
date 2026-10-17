@@ -1,11 +1,7 @@
-CREATE DATABASE IF NOT EXISTS `upskillsit` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `upskillsit`;
+-- Select the target database in phpMyAdmin before importing this file.
+-- Existing tables are left untouched; this script never drops user data.
 
-SET FOREIGN_KEY_CHECKS=0;
-DROP TABLE IF EXISTS `admin_logs`,`contact_messages`,`password_resets`,`notifications`,`articles`,`registrations`,`events`,`resources`,`applications`,`opportunities`,`experiences`,`projects`,`student_skills`,`skills`,`company_profiles`,`professional_profiles`,`student_profiles`,`users`;
-SET FOREIGN_KEY_CHECKS=1;
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(100) NOT NULL,
   last_name VARCHAR(100) NOT NULL,
@@ -20,7 +16,7 @@ CREATE TABLE users (
   INDEX idx_users_role_status (role,status)
 ) ENGINE=InnoDB;
 
-CREATE TABLE password_resets (
+CREATE TABLE IF NOT EXISTS password_resets (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL,
   token_hash CHAR(64) NOT NULL UNIQUE,
@@ -30,7 +26,7 @@ CREATE TABLE password_resets (
   CONSTRAINT fk_password_reset_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE student_profiles (
+CREATE TABLE IF NOT EXISTS student_profiles (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL UNIQUE,
   photo_path VARCHAR(255), cv_path VARCHAR(255),
@@ -41,7 +37,7 @@ CREATE TABLE student_profiles (
   CONSTRAINT fk_student_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE professional_profiles (
+CREATE TABLE IF NOT EXISTS professional_profiles (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL UNIQUE,
   function_title VARCHAR(150), company VARCHAR(190), expertise_domain VARCHAR(150), experience_years INT UNSIGNED,
@@ -50,7 +46,7 @@ CREATE TABLE professional_profiles (
   CONSTRAINT fk_professional_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE company_profiles (
+CREATE TABLE IF NOT EXISTS company_profiles (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL UNIQUE,
   company_name VARCHAR(190), sector VARCHAR(150), website VARCHAR(255), location VARCHAR(150),
@@ -59,13 +55,13 @@ CREATE TABLE company_profiles (
   CONSTRAINT fk_company_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE skills (
+CREATE TABLE IF NOT EXISTS skills (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL UNIQUE,
   category VARCHAR(120) NOT NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE student_skills (
+CREATE TABLE IF NOT EXISTS student_skills (
   student_profile_id BIGINT UNSIGNED NOT NULL,
   skill_id BIGINT UNSIGNED NOT NULL,
   level ENUM('debutant','intermediaire','avance') DEFAULT 'intermediaire',
@@ -74,7 +70,7 @@ CREATE TABLE student_skills (
   FOREIGN KEY(skill_id) REFERENCES skills(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL,
   name VARCHAR(190) NOT NULL,
@@ -87,7 +83,7 @@ CREATE TABLE projects (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE experiences (
+CREATE TABLE IF NOT EXISTS experiences (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL,
   type VARCHAR(120),
@@ -100,7 +96,7 @@ CREATE TABLE experiences (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE opportunities (
+CREATE TABLE IF NOT EXISTS opportunities (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(190) NOT NULL,
   type VARCHAR(80) NOT NULL,
@@ -123,7 +119,7 @@ CREATE TABLE opportunities (
   FOREIGN KEY(company_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE applications (
+CREATE TABLE IF NOT EXISTS applications (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   opportunity_id BIGINT UNSIGNED NOT NULL,
   user_id BIGINT UNSIGNED NOT NULL,
@@ -137,7 +133,7 @@ CREATE TABLE applications (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE resources (
+CREATE TABLE IF NOT EXISTS resources (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(190) NOT NULL,
   description TEXT NOT NULL,
@@ -154,7 +150,7 @@ CREATE TABLE resources (
   INDEX idx_resources_status_category (status,category)
 ) ENGINE=InnoDB;
 
-CREATE TABLE events (
+CREATE TABLE IF NOT EXISTS events (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(190) NOT NULL,
   description TEXT NOT NULL,
@@ -168,7 +164,7 @@ CREATE TABLE events (
   INDEX idx_events_status_date (status,event_date)
 ) ENGINE=InnoDB;
 
-CREATE TABLE registrations (
+CREATE TABLE IF NOT EXISTS registrations (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL,
   event_id BIGINT UNSIGNED NOT NULL,
@@ -180,7 +176,7 @@ CREATE TABLE registrations (
   FOREIGN KEY(event_id) REFERENCES events(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE articles (
+CREATE TABLE IF NOT EXISTS articles (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(190) NOT NULL,
   slug VARCHAR(190) NOT NULL UNIQUE,
@@ -191,7 +187,7 @@ CREATE TABLE articles (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT UNSIGNED NOT NULL,
   title VARCHAR(190) NOT NULL,
@@ -201,7 +197,7 @@ CREATE TABLE notifications (
   FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE contact_messages (
+CREATE TABLE IF NOT EXISTS contact_messages (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL,
@@ -214,7 +210,7 @@ CREATE TABLE contact_messages (
   INDEX idx_contact_messages_created (created_at)
 ) ENGINE=InnoDB;
 
-CREATE TABLE admin_logs (
+CREATE TABLE IF NOT EXISTS admin_logs (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   admin_id BIGINT UNSIGNED NULL,
   action VARCHAR(190) NOT NULL,

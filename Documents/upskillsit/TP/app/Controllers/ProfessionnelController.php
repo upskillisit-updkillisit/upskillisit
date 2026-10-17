@@ -90,7 +90,7 @@ final class ProfessionnelController extends Controller
         $id = !empty($data['id']) ? (int) $data['id'] : null;
         $profile->saveProject((int) Auth::id(), $data, $id);
         Session::flash('success', t('messages.project_saved'));
-        $this->redirect('/professionnel/experiences');
+        $this->redirect('/professionnel/projets');
     }
 
     public function deleteProject(string $id): void
@@ -99,7 +99,7 @@ final class ProfessionnelController extends Controller
         CSRF::requireValid();
         (new Profile())->deleteProject((int) Auth::id(), (int) $id);
         Session::flash('success', t('messages.project_deleted'));
-        $this->redirect('/professionnel/experiences');
+        $this->redirect('/professionnel/projets');
     }
 
     public function saveExperience(): void

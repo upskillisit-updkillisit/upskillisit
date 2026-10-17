@@ -218,7 +218,7 @@ return [
         'email_used' => 'Cet email est deja utilise.',
         'too_many_attempts' => 'Trop de tentatives. Reessayez dans quelques minutes.',
         'invalid_credentials' => 'Identifiants invalides ou compte suspendu.',
-        'reset_if_exists' => 'Si le compte existe, un lien de reinitialisation sera envoye.',
+        'reset_if_exists' => 'Si le compte existe, un lien sera envoye lorsque le service de messagerie est configure.',
         'local_link' => 'En local',
         'password_confirm' => 'Le mot de passe doit contenir au moins 8 caracteres et etre confirme.',
         'password_updated' => 'Mot de passe mis a jour. Vous pouvez vous connecter.',
